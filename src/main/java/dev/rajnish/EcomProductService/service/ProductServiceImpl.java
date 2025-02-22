@@ -6,48 +6,39 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.rajnish.EcomProductService.client.FakeStoreClient;
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
-import dev.rajnish.EcomProductService.dto.FakeStoreDTO.FakeStoreProductResponseDTO;
 import dev.rajnish.EcomProductService.entity.Product;
-import dev.rajnish.EcomProductService.exceptions.NoProductPresentException;
-import dev.rajnish.EcomProductService.exceptions.ProductNotFoundException;
+import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
+import dev.rajnish.EcomProductService.mapper.EntityToDTOMapper;
+import dev.rajnish.EcomProductService.repository.ProductRepository;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
 @Service
-public class ProductServiceImpl implements ProductService{
-
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private FakeStoreClient fakeStoreClient;
+    private ProductRepository productRepository;
 
     @Override
-    public List<FakeStoreProductResponseDTO> getAllProducts() throws NoProductPresentException {
-
-        List<FakeStoreProductResponseDTO> products = fakeStoreClient.getAllProducts();
-        if(products==null)
-        {
-            throw new ProductNotFoundException("No products present");
-        }
-        return products;
-    }
-
-    @Override
-    public FakeStoreProductResponseDTO getProduct(int productId) throws ProductNotFoundException {
-        FakeStoreProductResponseDTO product = fakeStoreClient.getProductById(productId);
-        if(product==null)
-        {
-            throw new ProductNotFoundException("Product not found with id "+productId);
-        }
-
-        return product;
-    }
-
-    @Override
-    public ProductResponseDTO createProduct(CreateProductRequestDTO product) {
+    public List<ProductResponseDTO> getAllProducts() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createProduct'");
+        throw new UnsupportedOperationException("Unimplemented method 'getAllProducts'");
+    }
+
+    @Override
+    public ProductResponseDTO getProduct(int productId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProduct'");
+    }
+
+    @Override
+    public ProductResponseDTO createProduct(CreateProductRequestDTO productDTO) {
+        Product product = DtoToEntityMapper.productDtoToEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        ProductResponseDTO productResponseDTO = EntityToDTOMapper.productToDTOMapper(savedProduct);
+
+        return productResponseDTO;
     }
 
     @Override
@@ -72,5 +63,8 @@ public class ProductServiceImpl implements ProductService{
     public List<Product> getProducts(double minPrice, double maxPrice) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getProducts'");
-    }   
+    }
+
+    
+    
 }

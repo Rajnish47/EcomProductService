@@ -10,9 +10,9 @@ import dev.rajnish.EcomProductService.entity.Product;
 
 public interface ProductService {
 
-    List<FakeStoreProductResponseDTO> getAllProducts();
-    FakeStoreProductResponseDTO getProduct(int productId);
-    ProductResponseDTO createProduct(CreateProductRequestDTO product);
+    List<ProductResponseDTO> getAllProducts();
+    ProductResponseDTO getProduct(int productId);
+    ProductResponseDTO createProduct(CreateProductRequestDTO productDTO);
     ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId);
     boolean deleteProduct(UUID productId);
     ProductResponseDTO getProduct(String productName);
