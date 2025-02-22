@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
 import dev.rajnish.EcomProductService.dto.FakeStoreDTO.FakeStoreProductResponseDTO;
+import dev.rajnish.EcomProductService.exceptions.InvalidDetailException;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
 @RestController
@@ -28,6 +29,10 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public ResponseEntity getProductById(@PathVariable("id") int id)
     {
+        if(id<1)
+        {
+            throw new InvalidDetailException("Invalid product id");
+        }
         FakeStoreProductResponseDTO product = productService.getProduct(id);
         return ResponseEntity.ok(product);
     }

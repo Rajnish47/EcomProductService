@@ -11,6 +11,7 @@ import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
 import dev.rajnish.EcomProductService.dto.FakeStoreDTO.FakeStoreProductResponseDTO;
 import dev.rajnish.EcomProductService.entity.Product;
+import dev.rajnish.EcomProductService.exceptions.NoProductPresentException;
 import dev.rajnish.EcomProductService.exceptions.ProductNotFoundException;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
@@ -22,9 +23,13 @@ public class ProductServiceImpl implements ProductService{
     private FakeStoreClient fakeStoreClient;
 
     @Override
-    public List<FakeStoreProductResponseDTO> getAllProducts() {
+    public List<FakeStoreProductResponseDTO> getAllProducts() throws NoProductPresentException {
 
         List<FakeStoreProductResponseDTO> products = fakeStoreClient.getAllProducts();
+        if(products==null)
+        {
+            throw new ProductNotFoundException("No products present");
+        }
         return products;
     }
 
