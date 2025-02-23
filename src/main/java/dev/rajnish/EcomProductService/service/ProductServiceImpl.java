@@ -1,5 +1,6 @@
 package dev.rajnish.EcomProductService.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,14 +23,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllProducts'");
+        List<ProductResponseDTO> products = new ArrayList<>();
+        List<Product> savedProducts = productRepository.findAll();
+        for(Product savedProduct: savedProducts)
+        {
+            products.add(EntityToDTOMapper.productToDTOMapper(savedProduct));
+        }
+
+        return products;
     }
 
     @Override
-    public ProductResponseDTO getProduct(int productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProduct'");
+    public ProductResponseDTO getProduct(UUID productId) {
+        Product savedProduct = productRepository.findById(productId).get();
+        ProductResponseDTO productResponseDTO = EntityToDTOMapper.productToDTOMapper(savedProduct);
+
+        return productResponseDTO;
     }
 
     @Override
@@ -43,14 +52,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
+
+        Product savedProduct = productRepository.findById(productId).get();
+        savedProduct.setTitle(updatedProduct.getTitle());
+        savedProduct.setPrice(updatedProduct.getPrice());
+        savedProduct.setDescription(updatedProduct.getDescription());
+        savedProduct.setImageUrl(updatedProduct.getImageURL());
+        savedProduct.setRating(updatedProduct.getRating());
+
+        productRepository.save(savedProduct);
+
+        return EntityToDTOMapper.productToDTOMapper(savedProduct);
     }
 
     @Override
     public boolean deleteProduct(UUID productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
+
+        productRepository.deleteById(productId);
+        return true;
     }
 
     @Override

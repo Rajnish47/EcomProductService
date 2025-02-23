@@ -5,13 +5,12 @@ import java.util.UUID;
 
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
-import dev.rajnish.EcomProductService.dto.FakeStoreDTO.FakeStoreProductResponseDTO;
 import dev.rajnish.EcomProductService.entity.Product;
 
 public interface ProductService {
 
     List<ProductResponseDTO> getAllProducts();
-    ProductResponseDTO getProduct(int productId);
+    ProductResponseDTO getProduct(UUID productId);
     ProductResponseDTO createProduct(CreateProductRequestDTO productDTO);
     ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId);
     boolean deleteProduct(UUID productId);
