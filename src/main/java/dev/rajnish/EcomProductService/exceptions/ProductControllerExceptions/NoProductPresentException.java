@@ -1,4 +1,4 @@
-package dev.rajnish.EcomProductService.exceptions;
+package dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions;
 
 public class NoProductPresentException extends RuntimeException {
 

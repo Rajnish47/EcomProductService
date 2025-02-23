@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
-import dev.rajnish.EcomProductService.exceptions.NoProductPresentException;
-import dev.rajnish.EcomProductService.exceptions.ProductNotFoundException;
+import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.NoProductPresentException;
+import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.ProductNotFoundException;
 
 public interface ProductService {
 
@@ -16,6 +16,7 @@ public interface ProductService {
     ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId);
     boolean deleteProduct(UUID productId);
     ProductResponseDTO getProduct(String productName) throws ProductNotFoundException;
-    List<ProductResponseDTO> getProducts(double minPrice, double maxPrice) throws NoProductPresentException; 
+    List<ProductResponseDTO> getProducts(double minPrice, double maxPrice) throws NoProductPresentException;
+    List<ProductResponseDTO> getProductsByCategory(String categoryName) throws NoProductPresentException;
     
 }

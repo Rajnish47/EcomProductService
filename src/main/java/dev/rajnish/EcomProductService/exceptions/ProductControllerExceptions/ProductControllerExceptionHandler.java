@@ -1,4 +1,4 @@
-package dev.rajnish.EcomProductService.exceptions;
+package dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

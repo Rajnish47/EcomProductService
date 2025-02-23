@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
-import dev.rajnish.EcomProductService.exceptions.InvalidDetailException;
+import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.InvalidDetailException;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
 @RestController
@@ -61,6 +61,13 @@ public class ProductController {
     public ResponseEntity getProductsBetweenPriceRange(@PathVariable("max_price") double max_price,@PathVariable("min_price") double min_price)
     {
         List<ProductResponseDTO> products = productService.getProducts(max_price, min_price);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/category/{name}")
+    public ResponseEntity getProductsByCategory(@PathVariable("name") String categoryName)
+    {
+        List<ProductResponseDTO> products = productService.getProductsByCategory(categoryName);
         return ResponseEntity.ok(products);
     }
 

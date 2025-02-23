@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
+import dev.rajnish.EcomProductService.entity.Category;
 import dev.rajnish.EcomProductService.entity.Product;
-import dev.rajnish.EcomProductService.exceptions.NoProductPresentException;
-import dev.rajnish.EcomProductService.exceptions.ProductNotFoundException;
+import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.NoProductPresentException;
+import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.ProductNotFoundException;
 import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
 import dev.rajnish.EcomProductService.mapper.EntityToDTOMapper;
 import dev.rajnish.EcomProductService.repository.ProductRepository;
+import dev.rajnish.EcomProductService.service.interfaces.CategoryService;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
 @Service
@@ -22,6 +24,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
@@ -50,7 +54,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO createProduct(CreateProductRequestDTO productDTO) {
         Product product = DtoToEntityMapper.productDtoToEntity(productDTO);
+        UUID categoryId = productDTO.getCategoryID();
+        Category savedCategory = categoryService.getCategoryById(categoryId);
+        product.setCategory(savedCategory);
         Product savedProduct = productRepository.save(product);
+        List<Product> savedCategoryProducts = savedCategory.getProducts();
+        if(savedCategoryProducts==null)
+        {
+            savedCategoryProducts = new ArrayList<>();
+        }
+
+        savedCategoryProducts.add(savedProduct);
+        categoryService.updateCategory(savedCategory);
         ProductResponseDTO productResponseDTO = EntityToDTOMapper.productToDTOMapper(savedProduct);
 
         return productResponseDTO;
@@ -66,6 +81,8 @@ public class ProductServiceImpl implements ProductService {
         savedProduct.setImageUrl(updatedProduct.getImageURL());
         savedProduct.setRating(updatedProduct.getRating());
 
+        //TODO: Implement removing products when changing categories
+
         productRepository.save(savedProduct);
 
         return EntityToDTOMapper.productToDTOMapper(savedProduct);
@@ -74,6 +91,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean deleteProduct(UUID productId) {
 
+        //TODO: Delete from category also
+        Product savedProduct = productRepository.findById(productId).get();
+        if(savedProduct==null)
+        {
+            Category savedCategory = savedProduct.getCategory();
+            List<Product> savedCategoryProducts = savedCategory.getProducts();
+            savedCategoryProducts.remove(savedProduct);
+            savedCategory.setProducts(savedCategoryProducts);
+            categoryService.updateCategory(savedCategory);
+        }
         productRepository.deleteById(productId);
         return true;
     }
@@ -99,6 +126,24 @@ public class ProductServiceImpl implements ProductService {
             throw new NoProductPresentException("No product in the given price range");
         }
         
+        List<ProductResponseDTO> products = new ArrayList<>();
+        for(Product savedProduct: savedProducts)
+        {
+            products.add(EntityToDTOMapper.productToDTOMapper(savedProduct));
+        }
+
+        return products;
+    }
+
+    @Override
+    public List<ProductResponseDTO> getProductsByCategory(String categoryName) throws NoProductPresentException {
+
+        List<Product> savedProducts = productRepository.findByCategoryName(categoryName);
+        if(savedProducts==null)
+        {
+            throw new NoProductPresentException("No product in the given category");
+        }
+
         List<ProductResponseDTO> products = new ArrayList<>();
 
         for(Product savedProduct: savedProducts)
