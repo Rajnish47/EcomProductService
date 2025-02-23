@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
@@ -19,19 +20,20 @@ import dev.rajnish.EcomProductService.exceptions.InvalidDetailException;
 import dev.rajnish.EcomProductService.service.interfaces.ProductService;
 
 @RestController
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping("/all")
     public ResponseEntity getAllProducts()
     {
         List<ProductResponseDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);        
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity getProductById(@PathVariable("id") UUID id)
     {
         if(id==null)
@@ -42,21 +44,41 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping("/product/add")
+    @GetMapping("/title/{title}")
+    public ResponseEntity getProductByTitle(@PathVariable("title") String title)
+    {
+        if(title==null || title.isEmpty() || title.isBlank())
+        {
+            throw new InvalidDetailException("Please provide a proper product name");            
+        }
+
+        ProductResponseDTO productResponseDTO = productService.getProduct(title);
+
+        return ResponseEntity.ok(productResponseDTO);
+    }
+
+    @GetMapping("/price/{max_price}/{min_price}")
+    public ResponseEntity getProductsBetweenPriceRange(@PathVariable("max_price") double max_price,@PathVariable("min_price") double min_price)
+    {
+        List<ProductResponseDTO> products = productService.getProducts(max_price, min_price);
+        return ResponseEntity.ok(products);
+    }
+
+    @PostMapping("/add")
     public ResponseEntity addNewProduct(@RequestBody CreateProductRequestDTO createProductRequestDTO)
     {
         ProductResponseDTO productResponseDTO = productService.createProduct(createProductRequestDTO);
         return ResponseEntity.ok(productResponseDTO);
     }
 
-    @PutMapping("/product/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity updateProduct(@PathVariable("id") UUID productId,@RequestBody CreateProductRequestDTO updateProductRequestDTO)
     {
         ProductResponseDTO updatedProduct = productService.updateProduct(updateProductRequestDTO, productId);
         return ResponseEntity.ok(updatedProduct);
     }
 
-    @DeleteMapping("/product/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteProduct(@PathVariable("id") UUID productId)
     {
         productService.deleteProduct(productId);

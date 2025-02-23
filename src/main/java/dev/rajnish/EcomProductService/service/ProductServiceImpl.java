@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
 import dev.rajnish.EcomProductService.entity.Product;
+import dev.rajnish.EcomProductService.exceptions.NoProductPresentException;
+import dev.rajnish.EcomProductService.exceptions.ProductNotFoundException;
 import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
 import dev.rajnish.EcomProductService.mapper.EntityToDTOMapper;
 import dev.rajnish.EcomProductService.repository.ProductRepository;
@@ -34,8 +36,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO getProduct(UUID productId) {
+    public ProductResponseDTO getProduct(UUID productId) throws ProductNotFoundException {
         Product savedProduct = productRepository.findById(productId).get();
+        if(savedProduct==null)
+        {
+            throw new ProductNotFoundException("No product with id: "+productId);
+        }
         ProductResponseDTO productResponseDTO = EntityToDTOMapper.productToDTOMapper(savedProduct);
 
         return productResponseDTO;
@@ -73,17 +79,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO getProduct(String productName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProduct'");
+    public ProductResponseDTO getProduct(String productName) throws ProductNotFoundException {
+        Product savedProduct = productRepository.findProductByTitle(productName);
+        if(savedProduct==null)
+        {
+            throw new ProductNotFoundException("No product with title: "+productName);
+        }
+
+        return EntityToDTOMapper.productToDTOMapper(savedProduct);
     }
 
     @Override
-    public List<Product> getProducts(double minPrice, double maxPrice) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProducts'");
-    }
+    public List<ProductResponseDTO> getProducts(double minPrice, double maxPrice) throws NoProductPresentException {
 
-    
-    
+        List<Product> savedProducts = productRepository.findByPriceBetween(maxPrice, minPrice);
+
+        if(savedProducts==null)
+        {
+            throw new NoProductPresentException("No product in the given price range");
+        }
+        
+        List<ProductResponseDTO> products = new ArrayList<>();
+
+        for(Product savedProduct: savedProducts)
+        {
+            products.add(EntityToDTOMapper.productToDTOMapper(savedProduct));
+        }
+
+        return products;
+    }    
 }
