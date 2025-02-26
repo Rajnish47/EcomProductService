@@ -1,4 +1,4 @@
-package dev.rajnish.EcomProductService.exceptions.CategoryExceptions;
+package dev.rajnish.EcomProductService.exceptions.CategoryControllerExceptions;
 
 public class CategoryNotPresentException extends RuntimeException {
 
@@ -9,6 +9,6 @@ public class CategoryNotPresentException extends RuntimeException {
 
     public CategoryNotPresentException(String message)
     {
-
+        super(message);
     }    
 }

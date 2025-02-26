@@ -6,7 +6,7 @@ import java.util.UUID;
 import dev.rajnish.EcomProductService.dto.CategoryResponseDTO;
 import dev.rajnish.EcomProductService.dto.CreateCategoryRequestDTO;
 import dev.rajnish.EcomProductService.entity.Category;
-import dev.rajnish.EcomProductService.exceptions.CategoryExceptions.CategoryNotPresentException;
+import dev.rajnish.EcomProductService.exceptions.CategoryControllerExceptions.CategoryNotPresentException;
 
 public interface CategoryService {
     

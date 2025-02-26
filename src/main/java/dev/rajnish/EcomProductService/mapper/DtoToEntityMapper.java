@@ -15,6 +15,7 @@ public class DtoToEntityMapper {
         product.setPrice(createProductRequestDTO.getPrice());
         product.setImageUrl(createProductRequestDTO.getImageURL());
         product.setRating(createProductRequestDTO.getRating());
+        product.setQuantity(createProductRequestDTO.getQuantity());
 
         return product;        
     }

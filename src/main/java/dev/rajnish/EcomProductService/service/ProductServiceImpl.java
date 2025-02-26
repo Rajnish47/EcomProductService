@@ -80,8 +80,7 @@ public class ProductServiceImpl implements ProductService {
         savedProduct.setDescription(updatedProduct.getDescription());
         savedProduct.setImageUrl(updatedProduct.getImageURL());
         savedProduct.setRating(updatedProduct.getRating());
-
-        //TODO: Implement removing products when changing categories
+        savedProduct.setQuantity(updatedProduct.getQuantity());;
 
         productRepository.save(savedProduct);
 
@@ -91,9 +90,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean deleteProduct(UUID productId) {
 
-        //TODO: Delete from category also
         Product savedProduct = productRepository.findById(productId).get();
-        if(savedProduct==null)
+        if(savedProduct!=null)
         {
             Category savedCategory = savedProduct.getCategory();
             List<Product> savedCategoryProducts = savedCategory.getProducts();

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import dev.rajnish.EcomProductService.dto.CategoryResponseDTO;
 import dev.rajnish.EcomProductService.dto.CreateCategoryRequestDTO;
 import dev.rajnish.EcomProductService.entity.Category;
-import dev.rajnish.EcomProductService.exceptions.CategoryExceptions.CategoryNotPresentException;
+import dev.rajnish.EcomProductService.exceptions.CategoryControllerExceptions.CategoryNotPresentException;
 import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
 import dev.rajnish.EcomProductService.mapper.EntityToDTOMapper;
 import dev.rajnish.EcomProductService.repository.CategoryRepository;

@@ -13,5 +13,6 @@ public class CreateProductRequestDTO {
     private String description;
     private UUID categoryID;
     private String imageURL;
-    private double rating;    
+    private double rating;  
+    private int quantity;  
 }
