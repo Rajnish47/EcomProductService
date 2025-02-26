@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import dev.rajnish.EcomProductService.dto.CartResponseDTO;
 import dev.rajnish.EcomProductService.dto.ProductToCartDTO;
+import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
 import dev.rajnish.EcomProductService.entity.Cart;
 import dev.rajnish.EcomProductService.entity.CartProduct;
 import dev.rajnish.EcomProductService.entity.Product;
@@ -73,5 +74,17 @@ public class CartServiceImpl implements CartService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeProductFromCart'");
     }
+
+    @Override
+    public boolean updateCartProductQuantity(UpdateCartProductQuantityDTO updateCartProductQuantityDTO) {
+        CartProduct savedCartProduct = cartProductRepository.findById(updateCartProductQuantityDTO.getCartProductId()).get();
+        savedCartProduct.setQuantity(updateCartProductQuantityDTO.getQuantity());
+
+        cartProductRepository.save(savedCartProduct);
+
+        return true;
+    }
+
+    
     
 }

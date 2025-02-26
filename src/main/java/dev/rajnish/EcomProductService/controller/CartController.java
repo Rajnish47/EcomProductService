@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.rajnish.EcomProductService.dto.ProductToCartDTO;
+import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
 import dev.rajnish.EcomProductService.service.interfaces.CartService;
 
 @RestController
@@ -43,6 +44,19 @@ public class CartController {
         }
 
         return ResponseEntity.ok("Product added to cart");
+    }
+    
+    @PostMapping("/product/update")
+    public ResponseEntity updateProductQuantity(@RequestBody UpdateCartProductQuantityDTO updateCartProductQuantityDTO)
+    {
+        boolean op = cartService.updateCartProductQuantity(updateCartProductQuantityDTO);
+
+        if(op==false)
+        {
+            return ResponseEntity.ok("Unable to update quantity");
+        }
+
+        return ResponseEntity.ok("Quantity updated");
     }
     
 }
