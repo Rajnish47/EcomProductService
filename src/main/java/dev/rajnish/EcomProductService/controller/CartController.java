@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.rajnish.EcomProductService.dto.ProductToCartDTO;
+import dev.rajnish.EcomProductService.dto.RemoveProductFromCartRequestDTO;
 import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
 import dev.rajnish.EcomProductService.service.interfaces.CartService;
 
@@ -57,6 +59,18 @@ public class CartController {
         }
 
         return ResponseEntity.ok("Quantity updated");
+    }
+
+    @DeleteMapping("/product/remove")
+    public ResponseEntity removeProductFromCart(@RequestBody RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO)
+    {
+        boolean op = cartService.removeProductFromCart(removeProductFromCartRequestDTO);
+        if(op==false)
+        {
+            return ResponseEntity.ok("Unable to remove product from cart");
+        }
+
+        return ResponseEntity.ok("Product removed from cart");
     }
     
 }

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import dev.rajnish.EcomProductService.dto.CartResponseDTO;
 import dev.rajnish.EcomProductService.dto.ProductToCartDTO;
+import dev.rajnish.EcomProductService.dto.RemoveProductFromCartRequestDTO;
 import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
 
 public interface CartService {
@@ -12,5 +13,5 @@ public interface CartService {
     CartResponseDTO getCartDetailsById(UUID cartId);
     boolean addProductToCart(ProductToCartDTO productToCartDTO);
     boolean updateCartProductQuantity(UpdateCartProductQuantityDTO updateCartProductQuantityDTO);
-    boolean removeProductFromCart(ProductToCartDTO productToCartDTO);    
+    boolean removeProductFromCart(RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO);    
 }
