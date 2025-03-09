@@ -2,6 +2,7 @@ package dev.rajnish.EcomProductService.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponseDTO getCartDetailsById(UUID cartId) {
-        Cart savedCart = cartRepository.findById(cartId).get();
+    public CartResponseDTO getCartDetailsById(UUID userId) {
 
+        Cart savedCart = cartRepository.findByUserId(userId);
         return EntityToDTOMapper.cartToDTOMapper(savedCart);
     }
 

@@ -25,7 +25,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/add")
+    @PostMapping("/add") // requires admin privilages
     public ResponseEntity createNewCategory(@RequestBody CreateCategoryRequestDTO createCategoryRequestDTO)
     {
         CategoryResponseDTO categoryResponseDTO = categoryService.createNewCategory(createCategoryRequestDTO);
@@ -47,10 +47,10 @@ public class CategoryController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity getCategoryById(@PathVariable("id") UUID id)
+    public ResponseEntity getCategoryByUserId(@PathVariable("i") UUID userId)
     {
         //TODO:Add exception handeling
-        return ResponseEntity.ok(categoryService.findCategoryById(id));
+        return ResponseEntity.ok(categoryService.findCategoryById(userId));
     }
     
 }
