@@ -31,11 +31,12 @@ public class CartServiceImpl implements CartService {
     private ProductRepository productRepository;
 
     @Override
-    public CartResponseDTO addNewCart(String name) // This method is only for development purpose. Actual functionality is when account is created, cart must automatically created
+    public CartResponseDTO addNewCart(String name,UUID userId) // This method is only for development purpose. Actual functionality is when account is created, cart must automatically created
     {
 
         Cart cart = new Cart();
         cart.setCartName(name);
+        cart.setUserId(userId);
         Cart savedCart = cartRepository.save(cart);
         
         return EntityToDTOMapper.cartToDTOMapper(savedCart);        

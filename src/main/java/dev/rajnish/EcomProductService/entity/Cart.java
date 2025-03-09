@@ -1,6 +1,7 @@
 package dev.rajnish.EcomProductService.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Setter
 public class Cart extends BaseModel {
 
+    private UUID userId;
     private String cartName;
     @OneToMany
     private List<CartProduct> cartProducts;

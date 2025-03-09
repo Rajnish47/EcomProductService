@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.rajnish.EcomProductService.dto.CreateCartRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductToCartDTO;
 import dev.rajnish.EcomProductService.dto.RemoveProductFromCartRequestDTO;
 import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
@@ -21,13 +22,15 @@ import dev.rajnish.EcomProductService.service.interfaces.CartService;
 @RequestMapping("/cart")
 public class CartController {
 
+    //All controller methods require user permission to access
+
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/add/{name}")
-    public ResponseEntity addNewCart(@PathVariable("name") String cartName)
+    @PostMapping("/add")
+    public ResponseEntity addNewCart(@RequestBody CreateCartRequestDTO createCartRequestDTO)
     {
-        return ResponseEntity.ok(cartService.addNewCart(cartName));
+        return ResponseEntity.ok(cartService.addNewCart(createCartRequestDTO.getCartName(),createCartRequestDTO.getUserId()));
     }
 
     @GetMapping("/{id}")

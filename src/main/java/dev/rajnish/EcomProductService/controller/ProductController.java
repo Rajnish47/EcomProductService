@@ -71,6 +71,8 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    //below conteoller methods require authentication, role required is admin
+
     @PostMapping("/add")
     public ResponseEntity addNewProduct(@RequestBody CreateProductRequestDTO createProductRequestDTO)
     {
