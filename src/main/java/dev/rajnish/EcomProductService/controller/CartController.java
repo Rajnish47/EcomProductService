@@ -3,12 +3,14 @@ package dev.rajnish.EcomProductService.controller;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,15 +36,15 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getCartById(@PathVariable("id") UUID cartId)
+    public ResponseEntity getCartByUserId(@PathVariable("id") UUID userId,@RequestHeader(HttpHeaders.AUTHORIZATION) String token)
     {
-        return ResponseEntity.ok(cartService.getCartDetailsById(cartId));
+        return ResponseEntity.ok(cartService.getCartDetailsById(userId,token));
     }
 
     @PostMapping("/product/add")
-    public ResponseEntity addProductToCart(@RequestBody ProductToCartDTO productToCartDTO)
+    public ResponseEntity addProductToCart(@RequestBody ProductToCartDTO productToCartDTO,@RequestHeader(HttpHeaders.AUTHORIZATION) String token)
     {
-        boolean op = cartService.addProductToCart(productToCartDTO);
+        boolean op = cartService.addProductToCart(productToCartDTO,token);
         if(op==false)
         {
             return ResponseEntity.ok("Unable to add product to cart");
@@ -52,9 +54,9 @@ public class CartController {
     }
     
     @PostMapping("/product/update")
-    public ResponseEntity updateProductQuantity(@RequestBody UpdateCartProductQuantityDTO updateCartProductQuantityDTO)
+    public ResponseEntity updateProductQuantity(@RequestBody UpdateCartProductQuantityDTO updateCartProductQuantityDTO,@RequestHeader(HttpHeaders.AUTHORIZATION) String token)
     {
-        boolean op = cartService.updateCartProductQuantity(updateCartProductQuantityDTO);
+        boolean op = cartService.updateCartProductQuantity(updateCartProductQuantityDTO,token);
 
         if(op==false)
         {
@@ -65,9 +67,9 @@ public class CartController {
     }
 
     @DeleteMapping("/product/remove")
-    public ResponseEntity removeProductFromCart(@RequestBody RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO)
+    public ResponseEntity removeProductFromCart(@RequestBody RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO,@RequestHeader(HttpHeaders.AUTHORIZATION) String token)
     {
-        boolean op = cartService.removeProductFromCart(removeProductFromCartRequestDTO);
+        boolean op = cartService.removeProductFromCart(removeProductFromCartRequestDTO,token);
         if(op==false)
         {
             return ResponseEntity.ok("Unable to remove product from cart");

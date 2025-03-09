@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.rajnish.EcomProductService.client.AuthServiceClient;
 import dev.rajnish.EcomProductService.dto.CreateProductRequestDTO;
 import dev.rajnish.EcomProductService.dto.ProductResponseDTO;
 import dev.rajnish.EcomProductService.entity.Category;
 import dev.rajnish.EcomProductService.entity.Product;
+import dev.rajnish.EcomProductService.exceptions.UnauthorisedException;
 import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.NoProductPresentException;
 import dev.rajnish.EcomProductService.exceptions.ProductControllerExceptions.ProductNotFoundException;
 import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
@@ -26,6 +28,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private AuthServiceClient authServiceClient;
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
@@ -52,7 +56,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO createProduct(CreateProductRequestDTO productDTO) {
+    public ProductResponseDTO createProduct(CreateProductRequestDTO productDTO,String token) throws UnauthorisedException {
+        authServiceClient.authenticateUser(token, "Admin");
         Product product = DtoToEntityMapper.productDtoToEntity(productDTO);
         UUID categoryId = productDTO.getCategoryID();
         Category savedCategory = categoryService.getCategoryById(categoryId);
@@ -72,8 +77,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId) {
-
+    public ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId,String token) throws UnauthorisedException {
+        
+        authServiceClient.authenticateUser(token, "Admin");
         Product savedProduct = productRepository.findById(productId).get();
         savedProduct.setTitle(updatedProduct.getTitle());
         savedProduct.setPrice(updatedProduct.getPrice());
@@ -88,8 +94,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean deleteProduct(UUID productId) {
+    public boolean deleteProduct(UUID productId,String token) throws UnauthorisedException {
 
+        authServiceClient.authenticateUser(token, "Admin");
         Product savedProduct = productRepository.findById(productId).get();
         if(savedProduct!=null)
         {

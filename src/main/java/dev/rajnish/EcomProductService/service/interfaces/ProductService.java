@@ -12,9 +12,9 @@ public interface ProductService {
 
     List<ProductResponseDTO> getAllProducts();
     ProductResponseDTO getProduct(UUID productId) throws ProductNotFoundException;
-    ProductResponseDTO createProduct(CreateProductRequestDTO productDTO);
-    ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId);
-    boolean deleteProduct(UUID productId);
+    ProductResponseDTO createProduct(CreateProductRequestDTO productDTO,String token);
+    ProductResponseDTO updateProduct(CreateProductRequestDTO updatedProduct, UUID productId,String token);
+    boolean deleteProduct(UUID productId,String token);
     ProductResponseDTO getProduct(String productName) throws ProductNotFoundException;
     List<ProductResponseDTO> getProducts(double minPrice, double maxPrice) throws NoProductPresentException;
     List<ProductResponseDTO> getProductsByCategory(String categoryName) throws NoProductPresentException;

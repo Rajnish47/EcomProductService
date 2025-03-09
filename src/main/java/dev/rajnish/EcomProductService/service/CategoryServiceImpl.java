@@ -7,9 +7,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.rajnish.EcomProductService.client.AuthServiceClient;
 import dev.rajnish.EcomProductService.dto.CategoryResponseDTO;
 import dev.rajnish.EcomProductService.dto.CreateCategoryRequestDTO;
 import dev.rajnish.EcomProductService.entity.Category;
+import dev.rajnish.EcomProductService.exceptions.UnauthorisedException;
 import dev.rajnish.EcomProductService.exceptions.CategoryControllerExceptions.CategoryNotPresentException;
 import dev.rajnish.EcomProductService.mapper.DtoToEntityMapper;
 import dev.rajnish.EcomProductService.mapper.EntityToDTOMapper;
@@ -21,6 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private AuthServiceClient authServiceClient;
 
     @Override
     public List<CategoryResponseDTO> getAllCategories(){
@@ -37,8 +41,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDTO createNewCategory(CreateCategoryRequestDTO createCategoryRequestDTO) {
+    public CategoryResponseDTO createNewCategory(CreateCategoryRequestDTO createCategoryRequestDTO,String token) throws UnauthorisedException {
 
+        authServiceClient.authenticateUser(token, "Admin");
         Category category = DtoToEntityMapper.categoryDTOToEntity(createCategoryRequestDTO);
         Category savedCategory = categoryRepository.save(category);
         CategoryResponseDTO categoryResponseDTO = EntityToDTOMapper.categoryToDTOMapper(savedCategory);

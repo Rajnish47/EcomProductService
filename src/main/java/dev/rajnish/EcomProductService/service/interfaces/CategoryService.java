@@ -11,7 +11,7 @@ import dev.rajnish.EcomProductService.exceptions.CategoryControllerExceptions.Ca
 public interface CategoryService {
     
     List<CategoryResponseDTO> getAllCategories();
-    CategoryResponseDTO createNewCategory(CreateCategoryRequestDTO createCategoryRequestDTO);
+    CategoryResponseDTO createNewCategory(CreateCategoryRequestDTO createCategoryRequestDTO,String token);
     Category getCategoryById(UUID categoryId) throws CategoryNotPresentException;
     CategoryResponseDTO findCategoryById(UUID categoryId) throws CategoryNotPresentException;
     CategoryResponseDTO findCategoryByName(String categoryName) throws CategoryNotPresentException;

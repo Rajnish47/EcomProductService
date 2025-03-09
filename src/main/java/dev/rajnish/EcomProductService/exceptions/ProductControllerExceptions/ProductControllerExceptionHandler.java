@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import dev.rajnish.EcomProductService.controller.ProductController;
 import dev.rajnish.EcomProductService.dto.ExceptionResponseDTO;
+import dev.rajnish.EcomProductService.exceptions.UnauthorisedException;
 
 @ControllerAdvice(basePackageClasses = ProductController.class)
 public class ProductControllerExceptionHandler {
@@ -33,5 +34,12 @@ public class ProductControllerExceptionHandler {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(pe.getMessage(), 400);
 
         return new ResponseEntity<>(exceptionResponseDTO,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorisedException.class)
+    public ResponseEntity handleUnauthorisedException(UnauthorisedException e)
+    {
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(e.getMessage(), 401);
+        return new ResponseEntity<>(exceptionResponseDTO,HttpStatus.UNAUTHORIZED);
     }
 }

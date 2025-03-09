@@ -10,8 +10,8 @@ import dev.rajnish.EcomProductService.dto.UpdateCartProductQuantityDTO;
 public interface CartService {
 
     CartResponseDTO addNewCart(String name,UUID userId);
-    CartResponseDTO getCartDetailsById(UUID cartId);
-    boolean addProductToCart(ProductToCartDTO productToCartDTO);
-    boolean updateCartProductQuantity(UpdateCartProductQuantityDTO updateCartProductQuantityDTO);
-    boolean removeProductFromCart(RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO);    
+    CartResponseDTO getCartDetailsById(UUID cartId,String token);
+    boolean addProductToCart(ProductToCartDTO productToCartDTO,String token);
+    boolean updateCartProductQuantity(UpdateCartProductQuantityDTO updateCartProductQuantityDTO,String token);
+    boolean removeProductFromCart(RemoveProductFromCartRequestDTO removeProductFromCartRequestDTO,String token);    
 }
